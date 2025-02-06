@@ -2,6 +2,7 @@ package models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Movie {
     private String id;
@@ -20,8 +21,18 @@ public class Movie {
         this.language = language;
         this.cast = cast;
 
-        MovieTable.mdb().Movie.put(id,this);
+    }
 
+    public void addshowsRunningThisMovie(String showid){
+        this.showsRunningThisMovie.add(showid);
+    }
+
+    public void removeshowsRunningThisMovie(String showid){
+        for (int i = 0; i < showsRunningThisMovie.size(); i++) {
+            if(Objects.equals(showid, showsRunningThisMovie.get(i))){
+                showsRunningThisMovie.remove(i);
+            }
+        }
     }
 
 

@@ -9,6 +9,7 @@ import models.Seat;
 import models.Show;
 import models.ShowSeats;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +44,7 @@ public class ShowService {
         showTable.addshowSeat(s2);
         addshowtoScreen(id);
         addshowtoTheatre(id);
+        addShowRefToMovie(id,movieId);
 
     }
     public void generateSeats(String showid,HashMap<enums.SeatType, Integer> PricePerSeatType,HashMap<enums.SeatType,Integer> seatTypeAndCount){
@@ -83,7 +85,24 @@ public class ShowService {
     }
 
 
-    //public int getAvaiableSeats(String showid) {}
+
+    public void addShowRefToMovie(String showid, String mid){
+        MovieService.instance().addShowRefToMovie(showid,mid);
+    }
+
+
+    public int getAvaiableSeats(String showid, SeatType st) {
+        int seatsaval=0;
+        String x = showTable.getShow(showid).getShowSeatRef();
+        ArrayList<String> seats = showTable.getshowSeat(x).getShowSeatsRef();
+
+        for(int i = 0; i < seats.size(); i++) {
+                if(st == seatTable.getSeat(seats.get(i)).getSeatType() && seatTable.getSeat(seats.get(i)).getSeatBookingStatus()==SeatBookingStatus.Open){
+                        seatsaval++;
+                }
+        }
+        return seatsaval;
+    }
 
 
 }

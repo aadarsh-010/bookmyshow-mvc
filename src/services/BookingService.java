@@ -1,61 +1,117 @@
 package services;
 
+import database.BookingTable;
+import database.DatabaseCollection;
+import database.SeatTable;
+import enums.BookingStatus;
+import enums.SeatBookingStatus;
+import models.Booking;
+import services.paymentservice.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class BookingService {
 
 
     public static int BookingID = 0;
-    private static BookingService bookS;
+    private static BookingService bookingServiceObject;
+    BookingTable bookingtable;
+    SeatTable seatTable;
 
-    private BookingService() {
+    BookingService() {
+        bookingtable = DatabaseCollection.instance().BookingTable;
+        this.seatTable = DatabaseCollection.instance().SeatTable;
     }
 
-    public static BookingService bsv() {
-        if (bookS == null) {
-            bookS = new BookingService();
+    public static BookingService instance() {
+        if (bookingServiceObject == null) bookingServiceObject = new BookingService();
+        return bookingServiceObject;
+    }
+
+    public synchronized void bookShow(String id, String customerId, String showId, ArrayList<String> seatsBooked, double totalPrice, BookingStatus bookingStatus) throws Exception {
+        boolean check = true;
+
+
+        for (int i = 0; i < seatsBooked.size(); i++) {
+            if (seatTable.getSeat(seatsBooked.get(i)).getSeatBookingStatus() != SeatBookingStatus.Open) {
+                check = false;
+            }
         }
-        return bookS;
-    }
-
-    public synchronized void bookShow(String showid, String userid, int totalTickets, ArrayList<String> seatsBooking) {
-        int availableTickets = ShowService.ssv().getAvaiableSeats(showid);
         int totalprice = 0;
 
 
-        if (availableTickets >= totalTickets) {
+        if (check) {
 
-            HashMap<String, Integer> h1 = org.example.database.ShowTable.swdb().Showdb.get(showid).getSeatPrices();
-
-            for (String s : seatsBooking) {
-                totalprice += org.example.database.SeatTable.Stdb().Seat.get(s).getPrice();
-                org.example.database.SeatTable.Stdb().Seat.get(s).bookSeat(userid);
+            for (int i = 0; i < seatsBooked.size(); i++) {
+                seatTable.getSeat(seatsBooked.get(i)).setSeatBookingStatus(SeatBookingStatus.Reserved);
+                totalprice +=  seatTable.getSeat(seatsBooked.get(i)).getPrice();
             }
 
 
+
             //PaymentService----------------------------------------
-            Booking b1 = new Booking(Integer.toString(BookingID), userid, showid, seatsBooking, totalprice, "Confirmed");
+
+            System.out.println("SELECT PAYMENT METHOD :  CARD / DEBIT / UPI");
+            Scanner sc = new Scanner( System.in);
+            String input = sc.next();
+
+            if(Objects.equals(input, "CARD")){
+                System.out.println("enter card number");
+                String cardnum = sc.next();
+                CreditCard c1 = new CreditCard(cardnum);
+                PaymentService ps = new PaymentService(c1);
+                ps.pay(totalprice);
+            }
+            else if (Objects.equals(input, "DEBIT")){
+                System.out.println("enter debit number");
+                String cardnum = sc.next();
+                DebitCard c1 = new DebitCard(cardnum);
+                PaymentService ps = new PaymentService(c1);
+                ps.pay(totalprice);
+            }else if (Objects.equals(input, "UPI")){
+                System.out.println("enter upi number");
+                String upi = sc.next();
+                UPI c1 = new UPI(upi);
+                PaymentService ps = new PaymentService(c1);
+                ps.pay(totalprice);
+            }
+            else {
+                System.out.println("invalid payment method");
+            }
+
+
+
+            for (int i = 0; i < seatsBooked.size(); i++) {
+                seatTable.getSeat(seatsBooked.get(i)).setSeatBookingStatus(SeatBookingStatus.Booked);
+                totalprice +=  seatTable.getSeat(seatsBooked.get(i)).getPrice();
+            }
+
+
+            Booking b1 = new Booking(Integer.toString(BookingID),customerId,showId,seatsBooked,totalPrice,BookingStatus.Confirmed);
+            bookingtable.addBooking(b1);
             BookingID++;
-
-            org.example.database.Bookingdb.bdb().Booking.put(Integer.toString(BookingID), b1);
-            org.example.database.Bookingdb.bdb().UserBoooking.putIfAbsent(userid, new ArrayList<>());
-            org.example.database.Bookingdb.bdb().UserBoooking.get(userid).add(Integer.toString(BookingID));
+            UserService.instance().addUserBookings(customerId,b1.getId());
 
 
-            System.out.println("Booked " + totalTickets + " tickets, Remaining tickets: " + availableTickets);
+
+
+            System.out.println("Booked " + seatsBooked.size() + " for price total " + totalPrice);
         } else {
-            System.out.println("Not enough tickets available to book " + totalTickets);
+            System.out.println("Not enough tickets available to book ");
         }
     }
 
-    public void cancelShow(String bid) {
-        org.example.database.Bookingdb.bdb().removeBookings(bid);
+    public void cancelBooking(String bid) {
+        ArrayList<String> as= bookingtable.getBooking(bid).getBookedSeatsRef();
+        for (int i = 0; i < as.size(); i++) {
+            seatTable.getSeat(as.get(i)).setSeatBookingStatus(SeatBookingStatus.Open);
+        }
+        bookingtable.getBooking(bid).setBookingStatus(BookingStatus.Cancelled);
     }
 
-    public void cancelUserAllShow(String userid) {
-        org.example.database.Bookingdb.bdb().removeBookingsOfUser(userid);
-    }
 
 
 }
