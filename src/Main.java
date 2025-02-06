@@ -7,8 +7,5 @@ import org.example.services.UserService;
 public class Main {
     public static void main(String[] args) {
 
-        //UserService us = new UserService();
-        us.createUser("100","Adi","bvmadi@gmail.com","9770943003","CREATOR");
-
     }
 }

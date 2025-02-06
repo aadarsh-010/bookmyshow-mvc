@@ -9,9 +9,9 @@ public class TheatreDetails {
 
         ArrayList<String> shows = new ArrayList<>();
 
-        for (int i = 0; i < org.example.database.Theatredb.tdb().TheatreScreen.get(thid).size(); i++) {
-            for (int j = 0; j < org.example.database.Theatredb.tdb().ScreenShow.get(org.example.database.Theatredb.tdb().TheatreScreen.get(thid).get(i)).size(); j++) {
-                String x = org.example.database.Theatredb.tdb().ScreenShow.get(org.example.database.Theatredb.tdb().TheatreScreen.get(thid).get(i)).get(j);
+        for (int i = 0; i < org.example.database.TheatreTable.tdb().TheatreScreen.get(thid).size(); i++) {
+            for (int j = 0; j < org.example.database.TheatreTable.tdb().ScreenShow.get(org.example.database.TheatreTable.tdb().TheatreScreen.get(thid).get(i)).size(); j++) {
+                String x = org.example.database.TheatreTable.tdb().ScreenShow.get(org.example.database.TheatreTable.tdb().TheatreScreen.get(thid).get(i)).get(j);
                 shows.add(x);
             }
         }
@@ -20,15 +20,15 @@ public class TheatreDetails {
 
 
     public String getName(String thid) {
-        return org.example.database.Theatredb.tdb().Theatre.get(thid).getName();
+        return org.example.database.TheatreTable.tdb().Theatre.get(thid).getName();
     }
 
     public String getOwnerId(String thid) {
-        return org.example.database.Theatredb.tdb().Theatre.get(thid).getOwnerId();
+        return org.example.database.TheatreTable.tdb().Theatre.get(thid).getOwnerId();
     }
 
     public String getLocation(String thid) {
-        return org.example.database.Theatredb.tdb().Theatre.get(thid).getLocation();
+        return org.example.database.TheatreTable.tdb().Theatre.get(thid).getLocation();
     }
 
 

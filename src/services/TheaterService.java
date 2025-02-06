@@ -1,47 +1,57 @@
-package org.example.services;
+package services;
 
-import org.example.models.Theatre;
-
+import database.DatabaseCollection;
+import database.TheatreTable;
+import models.Theatre;
 import java.util.ArrayList;
 
 public class TheaterService {
 
-    public void CreateTheater(String id, String name, String location, String ownerId){
-                Theatre obj1 = new Theatre( id,  name,  location,  ownerId);
-                org.example.database.Theatredb.tdb().Theatre.put(id,obj1);
-                org.example.database.Theatredb.tdb().CreaterTheatre.putIfAbsent(ownerId,new ArrayList<>());
-                org.example.database.Theatredb.tdb().CreaterTheatre.get(ownerId).add(id);
-                org.example.database.Theatredb.tdb().CreaterTheatre.putIfAbsent(id,new ArrayList<>());
+    private static TheaterService theaterServiceObject;
+    TheatreTable theatreTable;
+
+    TheaterService() {
+        this.theatreTable = DatabaseCollection.instance().TheatreTable;
+    }
+
+    public static TheaterService instance() {
+        if (theaterServiceObject == null) theaterServiceObject = new TheaterService();
+        return theaterServiceObject;
     }
 
 
-    public void DeleteTheater(String id){
-        org.example.database.Theatredb.tdb().deletetheatre(id);
+
+    public void CreateTheater(String id, String name, String location, String ownerId) throws Exception {
+                Theatre t1 = new Theatre(id,name,location,ownerId);
+                theatreTable.addTheater(t1);
+                UserService.instance().addOwnedTheatres(ownerId,id);
     }
 
 
-
-
-
-
-    //....................................................................... THeatre basic taasks
-
-
-
-    public void setTheatreName(String thid,String name) {
-        org.example.database.Theatredb.tdb().Theatre.get(thid).setName(name);
+    public void DeleteTheater(String id) throws Exception {
+        Theatre t1 = theatreTable.getTheatre(id);
+        theatreTable.deletetheater(id);
+        for(int i = 0; i < t1.getScreen().size(); i++) {
+            ScreenService.instance().DeleteScreen(String.valueOf(t1.getScreen().get(i)));
+        }
+        UserService.instance().removeOwnedTheatres(t1.getOwnerId(),id);
     }
 
-
-    public void setTheatreOwnerId(String thid,String ownerId) {
-        org.example.database.Theatredb.tdb().Theatre.get(thid).setOwnerId(ownerId);
+    public void addScreenInTheater(String thid , String screenid) {
+        theatreTable.getTheatre(thid).addScreenInTheatre(screenid);
     }
 
-    public void setTheatreLocation(String thid,String location) {
-        org.example.database.Theatredb.tdb().Theatre.get(thid).setLocation(location);
+    public void removeScreenInTheater(String thid , String screenid) {
+        theatreTable.getTheatre(thid).removeScreenInTheatre(screenid);
     }
 
+    public void addShowInTheater(String thid , String showid) {
+        theatreTable.getTheatre(thid).addShowInTheatre(showid);
+    }
 
+    public void removeShowInTheater(String thid , String showid) {
+        theatreTable.getTheatre(thid).removeShowInTheatre(showid);
+    }
 
 
 }

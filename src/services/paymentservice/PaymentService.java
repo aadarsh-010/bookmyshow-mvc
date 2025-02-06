@@ -1,4 +1,4 @@
-package org.example.services.paymentservice;
+package services.paymentservice;
 
 public class PaymentService {
     private PaymentInterface pi;

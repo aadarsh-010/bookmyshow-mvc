@@ -1,6 +1,4 @@
-package org.example.services;
-
-import org.example.models.Booking;
+package services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,11 +26,11 @@ public class BookingService {
 
         if (availableTickets >= totalTickets) {
 
-            HashMap<String, Integer> h1 = org.example.database.Showdb.swdb().Showdb.get(showid).getSeatPrices();
+            HashMap<String, Integer> h1 = org.example.database.ShowTable.swdb().Showdb.get(showid).getSeatPrices();
 
             for (String s : seatsBooking) {
-                totalprice += org.example.database.Seatdb.Stdb().Seat.get(s).getPrice();
-                org.example.database.Seatdb.Stdb().Seat.get(s).bookSeat(userid);
+                totalprice += org.example.database.SeatTable.Stdb().Seat.get(s).getPrice();
+                org.example.database.SeatTable.Stdb().Seat.get(s).bookSeat(userid);
             }
 
 

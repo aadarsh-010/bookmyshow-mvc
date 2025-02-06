@@ -9,35 +9,35 @@ public class ShowDetails {
     }
 
     public void getMovieId(String sid ) {
-        org.example.database.Showdb.swdb().Showdb.get(sid).getMovieId();
+        org.example.database.ShowTable.swdb().Showdb.get(sid).getMovieId();
     }
 
     public void getTheatreId(String sid ) {
-        org.example.database.Showdb.swdb().Showdb.get(sid).getTheatreId();
+        org.example.database.ShowTable.swdb().Showdb.get(sid).getTheatreId();
     }
 
     public void setScreenId(String sid ) {
-        org.example.database.Showdb.swdb().Showdb.get(sid).getScreenId();
+        org.example.database.ShowTable.swdb().Showdb.get(sid).getScreenId();
     }
 
 
     public void setStartTime(String sid ) {
-        org.example.database.Showdb.swdb().Showdb.get(sid).getStartTime();
+        org.example.database.ShowTable.swdb().Showdb.get(sid).getStartTime();
     }
 
 
     public void setEndTime(String sid ) {
-        org.example.database.Showdb.swdb().Showdb.get(sid).getStartTime();
+        org.example.database.ShowTable.swdb().Showdb.get(sid).getStartTime();
     }
 
 
     public void setSeatPrices(String sid ) {
-        org.example.database.Showdb.swdb().Showdb.get(sid).getSeatPrices();
+        org.example.database.ShowTable.swdb().Showdb.get(sid).getSeatPrices();
     }
 
 
     public void setSeatTypeCount(String sid ) {
-        org.example.database.Showdb.swdb().Showdb.get(sid).getSeatTypeCount();
+        org.example.database.ShowTable.swdb().Showdb.get(sid).getSeatTypeCount();
     }
 
 

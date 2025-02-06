@@ -1,6 +1,6 @@
-package org.example.services.paymentservice;
+package services.paymentservice;
 
-public class DebitCard implements PaymentInterface{
+public class DebitCard implements PaymentInterface {
 
     private String debitCardNumber;
 

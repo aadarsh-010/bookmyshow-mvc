@@ -13,40 +13,15 @@ public class Show {
     private String showSeatRef;
 
 
-    public Show(String id, String movieId, String theatreId, String screenId, String startTime, String endTime, ArrayList<String> seatType,ArrayList<Integer> seatPrices,ArrayList<ArrayList<Integer>> eachSeatTypeCount) {
+    public Show(String id, String movieId, String theatreId, String screenId, String startTime, String endTime, String showSeatRef) {
         this.id = id;
         this.movieId = movieId;
-        org.example.database.Moviedb.mdb().MovieShow.putIfAbsent(movieId, new ArrayList<>());
-        org.example.database.Moviedb.mdb().MovieShow.get(movieId).add(id);
-
-
         this.theatreId = theatreId;
         this.screenId = screenId;
         this.startTime = startTime;
         this.endTime = endTime;
-
-
-        if (seatType.size() == seatPrices.size() && seatPrices.size() == eachSeatTypeCount.size()) {
-
-            for (int i = 0; i < seatType.size(); i++) {
-                this.seatPrices.put(seatType.get(i), seatPrices.get(i));
-            }
-            for (int i = 0; i < seatType.size(); i++) {
-                this.seatTypeCount.put(seatType.get(i), eachSeatTypeCount.get(i));
-            }
-
-
-        } else {
-            System.out.println("seatType , seatPrice and number of col in each row of each seatType should be equal");
-        }
-
-
-
-
+        this.showSeatRef = showSeatRef;
     }
-
-    //------------------------------------------------------------------------------------------------------------------------------------------
-
 
     public String getId() {
         return id;
@@ -96,19 +71,11 @@ public class Show {
         this.endTime = endTime;
     }
 
-    public HashMap<String, Integer> getSeatPrices() {
-        return seatPrices;
+    public String getShowSeatRef() {
+        return showSeatRef;
     }
 
-    public void setSeatPrices(HashMap<String, Integer> seatPrices) {
-        this.seatPrices = seatPrices;
-    }
-
-    public HashMap<String, ArrayList<Integer>> getSeatTypeCount() {
-        return seatTypeCount;
-    }
-
-    public void setSeatTypeCount(HashMap<String, ArrayList<Integer>> seatTypeCount) {
-        this.seatTypeCount = seatTypeCount;
+    public void setShowSeatRef(String showSeatRef) {
+        this.showSeatRef = showSeatRef;
     }
 }

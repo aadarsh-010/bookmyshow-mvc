@@ -1,7 +1,8 @@
-package org.example.models;
+package models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Theatre {
     private String id;
@@ -18,12 +19,33 @@ public class Theatre {
         this.ownerId = ownerId;
     }
 
-    public List<Theatre> getScreen() {
+    public ArrayList<String> getScreen() {
         return null;
     }
 
+    public void addScreenInTheatre(String screenid){
+        this.screensRef.add(screenid);
+    }
 
+    public void removeScreenInTheatre(String screenid){
+        for (int i = 0; i < screensRef.size(); i++) {
+            if(Objects.equals(screenid, screensRef.get(i))){
+                screensRef.remove(i);
+            }
+        }
+    }
 
+    public void addShowInTheatre(String showid){
+        this.showsInTheatreRef.add(showid);
+    }
+
+    public void removeShowInTheatre(String showid){
+        for (int i = 0; i < showsInTheatreRef.size(); i++) {
+            if(Objects.equals(showid, showsInTheatreRef.get(i))){
+                showsInTheatreRef.remove(i);
+            }
+        }
+    }
 
 
 

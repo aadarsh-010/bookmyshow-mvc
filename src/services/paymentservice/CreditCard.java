@@ -1,4 +1,4 @@
-package org.example.services.paymentservice;
+package services.paymentservice;
 
 public class CreditCard implements PaymentInterface{
     private String creditCardNumber;

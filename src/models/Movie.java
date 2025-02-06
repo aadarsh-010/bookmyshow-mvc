@@ -1,4 +1,4 @@
-package org.example.models;
+package models;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ public class Movie {
     private int duration;
     private String language;
     private ArrayList<String> cast ;
-    private ArrayList<String> catalogsOfMovie;
+    private ArrayList<String> showsRunningThisMovie;
 
     public Movie(String id, List<String> genre, String title, int duration, String language, ArrayList<String> cast) {
         this.id = id;
@@ -20,7 +20,7 @@ public class Movie {
         this.language = language;
         this.cast = cast;
 
-        org.example.database.Moviedb.mdb().Movie.put(id,this);
+        MovieTable.mdb().Movie.put(id,this);
 
     }
 
